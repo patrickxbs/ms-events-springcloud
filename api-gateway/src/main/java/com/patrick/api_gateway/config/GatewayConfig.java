@@ -12,7 +12,8 @@ public class GatewayConfig {
     public RouteLocator gatewayRoute(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route(p -> p.path("/events/**").uri("lb://event-service"))
-                .route(p -> p.path("/registrations").uri("lb://registration-service"))
+                .route(p -> p.path("/registrations/**").uri("lb://registration-service"))
+                .route(p -> p.path("/payments/**").uri("lb://payment-service"))
                 .build();
     }
 

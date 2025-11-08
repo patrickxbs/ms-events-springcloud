@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/events")
@@ -21,7 +23,7 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventResponseDto> getById(@PathVariable Long id) {
+    public ResponseEntity<EventResponseDto> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(eventService.getById(id));
     }
 }

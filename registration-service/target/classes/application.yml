@@ -11,11 +11,11 @@ spring:
     password: 1234
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
+    open-in-view: false
     properties:
       hibernate:
-    show-sql: false
-    open-in-view: false
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 eureka:
   client:

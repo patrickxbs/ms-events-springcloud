@@ -8,6 +8,8 @@ import com.patrick.event_service.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @Service
 public class EventService {
@@ -19,7 +21,7 @@ public class EventService {
         return EventMapper.toEventDto(eventRepository.save(event));
     }
 
-    public EventResponseDto getById(Long id) {
+    public EventResponseDto getById(UUID id) {
         Event event = eventRepository.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
         return EventMapper.toEventDto(event);
     }

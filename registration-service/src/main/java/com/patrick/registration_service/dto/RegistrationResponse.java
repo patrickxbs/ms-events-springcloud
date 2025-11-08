@@ -2,5 +2,7 @@ package com.patrick.registration_service.dto;
 
 import com.patrick.registration_service.domain.Status;
 
-public record RegistrationResponse(Long id, Long eventId, Double price, Integer quantity, Double totalPrice, Status status) {
+import java.util.UUID;
+
+public record RegistrationResponse(UUID id, Long eventId, Double price, Integer quantity, Double totalPrice, Status status) {
 }
