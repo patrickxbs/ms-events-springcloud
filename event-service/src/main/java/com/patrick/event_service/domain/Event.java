@@ -22,6 +22,7 @@ public class Event {
     private String title;
     private String description;
     private Integer capacity;
+    private Double ticketPrice;
     private Boolean remote;
     private LocalDateTime date;
 

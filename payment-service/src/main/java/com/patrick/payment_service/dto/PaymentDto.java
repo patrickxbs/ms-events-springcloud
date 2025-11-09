@@ -10,6 +10,6 @@ import java.util.UUID;
 public record PaymentDto(
         @Id UUID id,
         UUID registrationId,
-        StatusPayment status,
+        PaymentStatus status,
         LocalDateTime moment) {
 }

@@ -1,8 +1,8 @@
 package com.patrick.registration_service.mapper;
 
 import com.patrick.registration_service.domain.Registration;
-import com.patrick.registration_service.dto.RegistrationRequest;
-import com.patrick.registration_service.dto.RegistrationResponse;
+import com.patrick.registration_service.dto.registration.RegistrationRequest;
+import com.patrick.registration_service.dto.registration.RegistrationResponse;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,7 +13,7 @@ public class RegistrationMapper {
     }
 
     public static RegistrationResponse toDto(Registration registration) {
-        return new RegistrationResponse(registration.getId(), registration.getEventId(), registration.getPrice(),
+        return new RegistrationResponse(registration.getId(), registration.getEventId(),
                 registration.getQuantity(), registration.getTotalPrice(), registration.getStatus());
     }
 }

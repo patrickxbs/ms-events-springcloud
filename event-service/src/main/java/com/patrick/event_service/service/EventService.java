@@ -8,6 +8,7 @@ import com.patrick.event_service.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -22,8 +23,23 @@ public class EventService {
     }
 
     public EventResponseDto getById(UUID id) {
-        Event event = eventRepository.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
+        Event event = findEventByIdOrNotFoundException(id);
         return EventMapper.toEventDto(event);
+    }
+
+    public List<EventResponseDto> getAll() {
+        List<Event> events = eventRepository.findAll();
+        return events.stream().map(EventMapper::toEventDto).toList();
+    }
+
+    public void decreaseCapacity(UUID id, Integer quantity) {
+        Event event = findEventByIdOrNotFoundException(id);
+        event.setCapacity(event.getCapacity() - quantity);
+        eventRepository.save(event);
+    }
+
+    private Event findEventByIdOrNotFoundException(UUID id) {
+        return eventRepository.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
     }
 
 }

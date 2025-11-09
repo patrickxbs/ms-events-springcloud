@@ -18,16 +18,15 @@ public class Registration {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private Long eventId;
+    private UUID eventId;
 
-    private Double price;
     private Integer quantity;
     private Double totalPrice;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public Registration(Long eventId, Integer quantity) {
+    public Registration(UUID eventId, Integer quantity) {
         this.eventId = eventId;
         this.quantity = quantity;
     }

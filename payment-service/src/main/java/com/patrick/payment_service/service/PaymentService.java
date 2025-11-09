@@ -1,7 +1,6 @@
 package com.patrick.payment_service.service;
 
-import com.patrick.payment_service.dto.StatusPayment;
-import com.patrick.payment_service.dto.PaymentRequest;
+import com.patrick.payment_service.dto.PaymentStatus;
 import com.patrick.payment_service.dto.PaymentDto;
 import com.patrick.payment_service.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +16,12 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
 
-    public PaymentDto create(PaymentRequest request) {
+    public PaymentDto create(UUID registrationId) {
 
         boolean approved = new Random().nextBoolean();
-        StatusPayment status = approved ? StatusPayment.PAID : StatusPayment.REJECTED;
+        PaymentStatus status = approved ? PaymentStatus.PAID : PaymentStatus.REJECTED;
 
-        PaymentDto payment = new PaymentDto(UUID.randomUUID(), request.registrationId(), status, LocalDateTime.now());
+        PaymentDto payment = new PaymentDto(UUID.randomUUID(), registrationId, status, LocalDateTime.now());
 
         return paymentRepository.save(payment);
     }

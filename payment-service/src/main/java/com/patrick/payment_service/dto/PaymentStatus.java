@@ -1,7 +1,6 @@
 package com.patrick.payment_service.dto;
 
-public enum StatusPayment {
-
+public enum PaymentStatus {
     PAID,
     REJECTED
 }

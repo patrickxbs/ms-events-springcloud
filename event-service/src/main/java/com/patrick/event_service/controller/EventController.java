@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -25,5 +26,16 @@ public class EventController {
     @GetMapping("/{id}")
     public ResponseEntity<EventResponseDto> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(eventService.getById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EventResponseDto>> getAll() {
+        return ResponseEntity.ok(eventService.getAll());
+    }
+
+    @PutMapping("/{id}/quantity/{quantity}")
+    public ResponseEntity<Void> decreaseCapacity(@PathVariable UUID id, @PathVariable Integer quantity) {
+        eventService.decreaseCapacity(id, quantity);
+        return ResponseEntity.noContent().build();
     }
 }
