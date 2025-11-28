@@ -11,6 +11,9 @@ import com.patrick.registration_service.dto.registration.RegistrationRequest;
 import com.patrick.registration_service.dto.registration.RegistrationResponse;
 import com.patrick.registration_service.mapper.RegistrationMapper;
 import com.patrick.registration_service.repository.RegistrationRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,9 @@ public class RegistrationService {
     private final EventClient eventClient;
     private final PaymentClient paymentClient;
 
+    @CircuitBreaker(name = "registrationCircuitBreaker", fallbackMethod = "fallbackRegistration")
+    @Retry(name = "registrationRetry")
+    @RateLimiter(name = "registrationRateLimiter")
     public RegistrationResponse create(RegistrationRequest request) {
         Registration registration = RegistrationMapper.toRegistration(request);
         EventDto event = eventClient.getEvent(registration.getEventId());
@@ -65,5 +71,9 @@ public class RegistrationService {
     private void verifyCapacity(Integer capacity, Integer quantity) {
         if (capacity < quantity)
             throw new RuntimeException("Not enough seats available. Available capacity: " + capacity);
+    }
+
+    public RegistrationResponse fallbackRegistration(RegistrationRequest request, Exception ex) {
+        return new RegistrationResponse(null, request.eventId(), request.quantity(), 0D, Status.FAILED);
     }
 }

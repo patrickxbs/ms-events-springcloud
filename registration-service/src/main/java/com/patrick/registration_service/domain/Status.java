@@ -4,5 +4,6 @@ public enum Status {
 
     PENDING_PAYMENT,
     CONFIRMED,
-    CANCELLED
+    CANCELLED,
+    FAILED
 }
