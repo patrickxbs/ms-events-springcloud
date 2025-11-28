@@ -32,7 +32,8 @@ public class RegistrationService {
 
         verifyCapacity(event.capacity(), registration.getQuantity());
 
-        Double totalPrice = event.ticketPrice() * registration.getQuantity();
+        registration.setCurrentPrice(event.ticketPrice());
+        Double totalPrice = registration.getCurrentPrice() * registration.getQuantity();
         registration.setTotalPrice(totalPrice);
 
         registration.setStatus(Status.PENDING_PAYMENT);

@@ -20,6 +20,7 @@ public class Registration {
 
     private UUID eventId;
 
+    private Double currentPrice;
     private Integer quantity;
     private Double totalPrice;
 
