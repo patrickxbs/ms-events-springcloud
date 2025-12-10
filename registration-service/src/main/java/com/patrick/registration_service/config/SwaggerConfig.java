@@ -18,7 +18,7 @@ public class SwaggerConfig {
                                 "verifies event capacity, stores participant data, and coordinates the payment step.")
                         .version("1.0"))
                 .externalDocs(new ExternalDocumentation()
-                        .description("Project repository")
+                        .description("Project repository")  
                         .url("https://github.com/patrickxbs/ms-events-springcloud"));
     }
 }

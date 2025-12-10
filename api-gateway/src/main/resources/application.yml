@@ -8,11 +8,19 @@ spring:
     gateway:
       server:
         webflux:
-          discovery:
-            locator:
-              enabled: true
-              lower-case-service-id: true
-
+          routes:
+            - id: event-service
+              uri: lb://event-service
+              predicates:
+                - Path=/events/**
+            - id: registration-service
+              uri: lb://registration-service
+              predicates:
+                - Path=/registrations/**
+            - id: payment-service
+              uri: lb://payment-service
+              predicates:
+                - Path=/payments/**
 eureka:
   client:
     service-url:
