@@ -13,3 +13,11 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+
+springdoc:
+  api-docs:
+    path: /events/v3/api-docs
+  swagger-ui:
+    url: /events/v3/api-docs
+  override-server-url: true

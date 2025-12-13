@@ -33,3 +33,10 @@ resilience4j:
       registrationRateLimiter:
         limitForPeriod: 5
         limitRefreshPeriod: 10s
+
+springdoc:
+  api-docs:
+    path: /registrations/v3/api-docs
+  swagger-ui:
+    url: /registrations/v3/api-docs
+  override-server-url: true
