@@ -35,7 +35,7 @@ public class RegistrationController {
             description = "Triggers the payment flow for a registration and updates its status.")
     @PatchMapping("/{id}")
     public ResponseEntity<RegistrationResponse> processPayment(@PathVariable UUID id) {
-        registrationService.simulatePayment(id);
+        registrationService.processPayment(id);
         return ResponseEntity.noContent().build();
     }
 }

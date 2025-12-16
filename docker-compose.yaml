@@ -1,0 +1,164 @@
+services:
+
+  config-server:
+    image: patrickbxs/config-server
+    ports:
+      - 8888:8888
+    build:
+      context: ./config-server
+      dockerfile: Dockerfile
+    networks:
+      - patrick-network
+
+  discovery-service:
+    image: patrickbxs/discovery-service
+    ports:
+      - 8761:8761
+    build:
+      context: ./discovery-service
+      dockerfile: Dockerfile
+    networks:
+      - patrick-network
+
+  api-gateway:
+    image: patrickbxs/api-gateway
+    ports:
+      - 8765:8765
+    restart: always
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    depends_on:
+      - discovery-service
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka/
+    networks:
+      - patrick-network
+
+  event-db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      TZ: America/Sao_Paulo
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: 1234
+      MYSQL_DATABASE: event_service
+    ports:
+      - 3310:3306
+    volumes:
+      - event-volume-data:/var/lib/mysql
+    networks:
+      - patrick-network
+
+  payment-db:
+    image: mongo:7.0
+    restart: always
+    environment:
+      TZ: America/Sao_Paulo
+      MONGO_INITDB_ROOT_USERNAME: docker
+      MONGO_INITDB_ROOT_PASSWORD: 1234
+      MONGO_INITDB_DATABASE: payment_service
+    ports:
+      - 27017:27017
+    volumes:
+      - payment-volume-data:/data/db
+    networks:
+      - patrick-network
+
+  registration-db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      TZ: America/Sao_Paulo
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: 1234
+      MYSQL_DATABASE: registration_service
+    ports:
+      - 3308:3306
+    volumes:
+      - registration-volume-data:/var/lib/mysql
+    networks:
+      - patrick-network
+
+  event-service:
+    image: patrickbxs/event-service
+    restart: on-failure
+    build:
+      context: ./event-service
+      dockerfile: Dockerfile
+    environment:
+      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      TZ: America/Sao_Paulo
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka
+      SPRING_DATASOURCE_URL: jdbc:mysql://event-db:3306/event_service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&enabledTLSProtocols=TLSv1.2
+      SPRING_DATASOURCE_USERNAME: docker
+      SPRING_DATASOURCE_PASSWORD: 1234
+    ports:
+      - 8000:8000
+    depends_on:
+      - config-server
+      - discovery-service
+      - event-db
+    networks:
+      - patrick-network
+
+  payment-service:
+    image: patrickbxs/payment-service
+    restart: on-failure
+    build:
+      context: ./payment-service
+      dockerfile: Dockerfile
+    environment:
+      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      TZ: America/Sao_Paulo
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka
+      SPRING_DATA_MONGODB_HOST: payment-db
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: payment_service
+      SPRING_DATA_MONGODB_USERNAME: docker
+      SPRING_DATA_MONGODB_PASSWORD: 1234
+      SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: admin
+    ports:
+      - 8200:8200
+    depends_on:
+      - config-server
+      - payment-db
+      - discovery-service
+    networks:
+      - patrick-network
+
+  registration-service:
+    image: patrickbxs/registration-service
+    restart: on-failure
+    build:
+      context: ./registration-service
+      dockerfile: Dockerfile
+    environment:
+      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      TZ: America/Sao_Paulo
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-service:8761/eureka
+      SPRING_DATASOURCE_URL: jdbc:mysql://registration-db:3306/registration_service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&enabledTLSProtocols=TLSv1.2
+      SPRING_DATASOURCE_USERNAME: docker
+      SPRING_DATASOURCE_PASSWORD: 1234
+    ports:
+      - 8100:8100
+    depends_on:
+      - config-server
+      - discovery-service
+      - registration-db
+      - event-service
+      - payment-service
+    networks:
+      - patrick-network
+
+volumes:
+  event-volume-data:
+  payment-volume-data:
+  registration-volume-data:
+
+networks:
+  patrick-network:
+    name: patrick-network
+    driver: bridge

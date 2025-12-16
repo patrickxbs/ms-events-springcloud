@@ -1,0 +1,11 @@
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\config\SwaggerConfig.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\config\WebConfig.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\controller\EventController.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\domain\Address.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\domain\Event.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\dto\EventResponseDto.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\dto\EventResquestDto.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\EventServiceApplication.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\mapper\EventMapper.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\repository\EventRepository.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\service\EventService.java

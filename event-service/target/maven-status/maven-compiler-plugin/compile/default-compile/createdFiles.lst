@@ -1,0 +1,11 @@
+com\patrick\event_service\domain\Address.class
+com\patrick\event_service\EventServiceApplication.class
+com\patrick\event_service\controller\EventController.class
+com\patrick\event_service\dto\EventResponseDto.class
+com\patrick\event_service\repository\EventRepository.class
+com\patrick\event_service\config\WebConfig.class
+com\patrick\event_service\service\EventService.class
+com\patrick\event_service\config\SwaggerConfig.class
+com\patrick\event_service\domain\Event.class
+com\patrick\event_service\mapper\EventMapper.class
+com\patrick\event_service\dto\EventResquestDto.class

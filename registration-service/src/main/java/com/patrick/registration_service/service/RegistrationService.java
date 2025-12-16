@@ -47,7 +47,7 @@ public class RegistrationService {
         return RegistrationMapper.toDto(registrationRepository.save(registration));
     }
 
-    public void simulatePayment(UUID id) {
+    public void processPayment(UUID id) {
 
         Registration registration = registrationRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Registration not found"));

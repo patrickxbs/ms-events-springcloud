@@ -1,0 +1,16 @@
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\client\EventClient.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\client\PaymentClient.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\config\SwaggerConfig.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\config\WebConfig.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\controller\RegistrationController.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\domain\Registration.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\domain\Status.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\dto\event\EventDto.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\dto\payment\PaymentDto.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\dto\payment\PaymentStatus.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\dto\registration\RegistrationRequest.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\dto\registration\RegistrationResponse.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\mapper\RegistrationMapper.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\RegistrationServiceApplication.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\repository\RegistrationRepository.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\service\RegistrationService.java
