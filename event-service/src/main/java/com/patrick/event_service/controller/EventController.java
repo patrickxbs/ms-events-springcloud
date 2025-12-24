@@ -28,14 +28,14 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(eventService.create(eventDto));
     }
 
-    @Operation(summary = "Decrease event capacity",
-            description = "Reduces the event capacity after a successful registration.")
+    @Operation(summary = "Get event by ID",
+            description = "Returns the details of a specific event based on its id.")
     @GetMapping("/{id}")
     public ResponseEntity<EventResponseDto> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(eventService.getById(id));
     }
 
-    @Operation(summary = "List all events",
+    @Operation(summary = "Get all events",
             description = "Returns a list of all registered events.")
     @GetMapping
     public ResponseEntity<List<EventResponseDto>> getAll() {
@@ -48,5 +48,12 @@ public class EventController {
     public ResponseEntity<Void> decreaseCapacity(@PathVariable UUID id, @PathVariable Integer quantity) {
         eventService.decreaseCapacity(id, quantity);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Get all available events.",
+            description = "Returns a list of events that still have available seats and have not yet occurred.")
+    @GetMapping("/available")
+    public ResponseEntity<List<EventResponseDto>> getAllAvailable() {
+        return ResponseEntity.ok(eventService.getAllAvailable());
     }
 }

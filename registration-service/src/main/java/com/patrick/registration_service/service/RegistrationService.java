@@ -77,11 +77,11 @@ public class RegistrationService {
         return RegistrationMapper.toDto(registrationRepository.save(registration));
     }
 
-    public List<RegistrationResponse> findAll() {
+    public List<RegistrationResponse> getAll() {
         return registrationRepository.findAll().stream().map(RegistrationMapper::toDto).toList();
     }
 
-    public List<RegistrationResponse> findAllByEvent(UUID eventId) {
+    public List<RegistrationResponse> getAllByEvent(UUID eventId) {
         return registrationRepository.findAllByEventId(eventId).stream().map(RegistrationMapper::toDto).toList();
     }
 

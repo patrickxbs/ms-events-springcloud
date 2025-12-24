@@ -8,6 +8,7 @@ import com.patrick.event_service.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,14 +29,17 @@ public class EventService {
     }
 
     public List<EventResponseDto> getAll() {
-        List<Event> events = eventRepository.findAll();
-        return events.stream().map(EventMapper::toEventDto).toList();
+        return eventRepository.findAll().stream().map(EventMapper::toEventDto).toList();
     }
 
     public void decreaseCapacity(UUID id, Integer quantity) {
         Event event = findEventByIdOrNotFoundException(id);
         event.setCapacity(event.getCapacity() - quantity);
         eventRepository.save(event);
+    }
+
+    public List<EventResponseDto> getAllAvailable() {
+        return eventRepository.findEventsAvailable(LocalDateTime.now()).stream().map(EventMapper::toEventDto).toList();
     }
 
     private Event findEventByIdOrNotFoundException(UUID id) {
