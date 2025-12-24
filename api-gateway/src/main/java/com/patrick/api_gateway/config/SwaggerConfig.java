@@ -1,5 +1,8 @@
 package com.patrick.api_gateway.config;
 
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springdoc.core.properties.SwaggerUiConfigParameters;
 import org.springdoc.core.properties.SwaggerUiConfigProperties;
@@ -14,6 +17,20 @@ import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
+
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Events Microservice API 2")
+                        .version("v1")
+                        .description("Documentation of Events Microservices"))
+                .servers(List.of(
+                        new Server()
+                                .url("http://localhost:8765")
+                                .description("Local Gateway")
+                ));
+    }
 
     @Bean
     public SwaggerUiConfigParameters swaggerUiConfigParameters(SwaggerUiConfigProperties properties) {
