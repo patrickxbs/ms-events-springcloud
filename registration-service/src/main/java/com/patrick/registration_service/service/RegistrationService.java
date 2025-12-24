@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -74,6 +75,14 @@ public class RegistrationService {
         else registration.setStatus(Status.CANCELLED);
 
         return RegistrationMapper.toDto(registrationRepository.save(registration));
+    }
+
+    public List<RegistrationResponse> findAll() {
+        return registrationRepository.findAll().stream().map(RegistrationMapper::toDto).toList();
+    }
+
+    public List<RegistrationResponse> findAllByEvent(UUID eventId) {
+        return registrationRepository.findAllByEventId(eventId).stream().map(RegistrationMapper::toDto).toList();
     }
 
     private void validateRegistration(EventDto event, Integer quantity) {
