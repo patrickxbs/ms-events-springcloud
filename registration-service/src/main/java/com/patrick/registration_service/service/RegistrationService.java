@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Slf4j
@@ -29,14 +30,14 @@ public class RegistrationService {
     private final EventClient eventClient;
     private final PaymentClient paymentClient;
 
-    @CircuitBreaker(name = "registrationCircuitBreaker", fallbackMethod = "fallbackRegistration")
+    @CircuitBreaker(name = "registrationService", fallbackMethod = "fallbackCreate")
     @Retry(name = "registrationRetry")
     @RateLimiter(name = "registrationRateLimiter")
     public RegistrationResponse create(RegistrationRequest request) {
         Registration registration = RegistrationMapper.toRegistration(request);
         EventDto event = eventClient.getEvent(registration.getEventId());
 
-        verifyCapacity(event.capacity(), registration.getQuantity());
+        validateRegistration(event, registration.getQuantity());
 
         registration.setCurrentPrice(event.ticketPrice());
         Double totalPrice = registration.getCurrentPrice() * registration.getQuantity();
@@ -47,33 +48,51 @@ public class RegistrationService {
         return RegistrationMapper.toDto(registrationRepository.save(registration));
     }
 
-    public void processPayment(UUID id) {
+    @CircuitBreaker(name = "paymentService", fallbackMethod = "fallbackPayment")
+    @Retry(name = "paymentRetry")
+    public RegistrationResponse processPayment(UUID id) {
 
         Registration registration = registrationRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Registration not found"));
 
+        if (registration.getStatus() != Status.PENDING_PAYMENT) {
+            throw new RuntimeException("Registration is not in a pending state.");
+        }
+
         EventDto event = eventClient.getEvent(registration.getEventId());
 
-        verifyCapacity(event.capacity(), registration.getQuantity());
+        validateRegistration(event, registration.getQuantity());
 
         PaymentDto payment = paymentClient.createPayment(id);
-        log.info(String.valueOf(payment.paymentStatus()));
+        log.info("Payment Status: {}", payment.paymentStatus());
+
         if (payment.paymentStatus().equals(PaymentStatus.PAID)) {
-                registration.setStatus(Status.CONFIRMED);
+            registration.setStatus(Status.CONFIRMED);
             eventClient.decreaseEventCapacity(registration.getEventId(), registration.getQuantity());
         }
 
         else registration.setStatus(Status.CANCELLED);
 
-        registrationRepository.save(registration);
+        return RegistrationMapper.toDto(registrationRepository.save(registration));
     }
 
-    private void verifyCapacity(Integer capacity, Integer quantity) {
-        if (capacity < quantity)
-            throw new RuntimeException("Not enough seats available. Available capacity: " + capacity);
+    private void validateRegistration(EventDto event, Integer quantity) {
+        if (event.date().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Registration impossible: the event has already taken place or the deadline has expired.");
+        }
+        if (event.capacity() < quantity) {
+            throw new RuntimeException("Insufficient capacity. Vacancies available: " + event.capacity());
+        }
     }
 
-    public RegistrationResponse fallbackRegistration(RegistrationRequest request, Exception ex) {
+    public RegistrationResponse fallbackCreate(RegistrationRequest request, Exception ex) {
+        log.error("Fallback triggered for creation. Reason: {}", ex.getMessage());
         return new RegistrationResponse(null, request.eventId(), request.quantity(), 0D, Status.FAILED);
     }
+
+    public RegistrationResponse fallbackPayment(UUID id, Exception ex) {
+        log.error("Fallback triggered for payment of ID {}. Reason: {}", id, ex.getMessage());
+        return new RegistrationResponse(id, null, null, 0D, Status.PENDING_PAYMENT);
+    }
 }
+

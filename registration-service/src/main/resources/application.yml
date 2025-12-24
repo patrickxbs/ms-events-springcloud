@@ -17,17 +17,25 @@ eureka:
 resilience4j:
   circuitbreaker:
     instances:
-      registrationCircuitBreaker:
+      registrationService:
         registerHealthIndicator: true
         slidingWindowSize: 5
         failureRateThreshold: 50
-        waitDurationInOpenState: 5s
+        waitDurationInOpenState: 30s
         permittedNumberOfCallsInHalfOpenState: 2
+      paymentCircuitBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 30s
   retry:
     instances:
       registrationRetry:
         maxAttempts: 3
-        waitDuration: 2s
+        waitDuration: 3s
+      paymentRetry:
+        maxAttempts: 2
+        waitDuration: 1s
   ratelimiter:
     instances:
       registrationRateLimiter:

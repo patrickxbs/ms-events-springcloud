@@ -33,9 +33,8 @@ public class RegistrationController {
 
     @Operation(summary = "Process registration payment",
             description = "Triggers the payment flow for a registration and updates its status.")
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/payment")
     public ResponseEntity<RegistrationResponse> processPayment(@PathVariable UUID id) {
-        registrationService.processPayment(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(registrationService.processPayment(id));
     }
 }
