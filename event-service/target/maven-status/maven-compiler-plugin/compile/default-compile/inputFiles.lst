@@ -3,9 +3,14 @@ C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\
 C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\controller\EventController.java
 C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\domain\Address.java
 C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\domain\Event.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\dto\EventRequestDto.java
 C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\dto\EventResponseDto.java
-C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\dto\EventResquestDto.java
 C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\EventServiceApplication.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\exception\EventNotFoundException.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\exception\handler\ErroFields.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\exception\handler\ExceptionDetails.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\exception\handler\RestExceptionHandler.java
+C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\exception\handler\ValidationExceptionDetails.java
 C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\mapper\EventMapper.java
 C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\repository\EventRepository.java
 C:\Users\NT\dev\ms-events\event-service\src\main\java\com\patrick\event_service\service\EventService.java

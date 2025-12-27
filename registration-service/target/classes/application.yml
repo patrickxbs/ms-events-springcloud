@@ -23,7 +23,7 @@ resilience4j:
         failureRateThreshold: 50
         waitDurationInOpenState: 30s
         permittedNumberOfCallsInHalfOpenState: 2
-      paymentCircuitBreaker:
+      paymentService:
         registerHealthIndicator: true
         slidingWindowSize: 5
         failureRateThreshold: 50

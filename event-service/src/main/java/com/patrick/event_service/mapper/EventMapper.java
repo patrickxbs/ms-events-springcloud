@@ -3,13 +3,13 @@ package com.patrick.event_service.mapper;
 import com.patrick.event_service.domain.Address;
 import com.patrick.event_service.domain.Event;
 import com.patrick.event_service.dto.EventResponseDto;
-import com.patrick.event_service.dto.EventResquestDto;
+import com.patrick.event_service.dto.EventRequestDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EventMapper {
 
-    public static Event toEvent(EventResquestDto dto) {
+    public static Event toEvent(EventRequestDto dto) {
         Address address = new Address(dto.city(), dto.street(), dto.number());
         return new Event(
                 null,

@@ -2,7 +2,8 @@ package com.patrick.event_service.service;
 
 import com.patrick.event_service.domain.Event;
 import com.patrick.event_service.dto.EventResponseDto;
-import com.patrick.event_service.dto.EventResquestDto;
+import com.patrick.event_service.dto.EventRequestDto;
+import com.patrick.event_service.exception.EventNotFoundException;
 import com.patrick.event_service.mapper.EventMapper;
 import com.patrick.event_service.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
-    public EventResponseDto create(EventResquestDto eventResquest) {
+    public EventResponseDto create(EventRequestDto eventResquest) {
         Event event = EventMapper.toEvent(eventResquest);
         return EventMapper.toEventDto(eventRepository.save(event));
     }
@@ -43,7 +44,8 @@ public class EventService {
     }
 
     private Event findEventByIdOrNotFoundException(UUID id) {
-        return eventRepository.findById(id).orElseThrow(() -> new RuntimeException("Event not found"));
+        return eventRepository.findById(id).orElseThrow(() -> new EventNotFoundException(
+                String.format("No event exists with ID: %s Please verify the provided event ID and try again.", id)));
     }
 
 }

@@ -1,10 +1,11 @@
 package com.patrick.event_service.controller;
 
 import com.patrick.event_service.dto.EventResponseDto;
-import com.patrick.event_service.dto.EventResquestDto;
+import com.patrick.event_service.dto.EventRequestDto;
 import com.patrick.event_service.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class EventController {
     @Operation(summary = "Create a new event",
             description = "Adds a new event with name, capacity, date and ticket price.")
     @PostMapping
-    public ResponseEntity<EventResponseDto> create(@RequestBody EventResquestDto eventDto) {
+    public ResponseEntity<EventResponseDto> create(@RequestBody @Valid EventRequestDto eventDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(eventService.create(eventDto));
     }
 

@@ -7,8 +7,12 @@ import com.patrick.registration_service.domain.Status;
 import com.patrick.registration_service.dto.event.EventDto;
 import com.patrick.registration_service.dto.payment.PaymentDto;
 import com.patrick.registration_service.dto.payment.PaymentStatus;
-import com.patrick.registration_service.dto.registration.RegistrationRequest;
-import com.patrick.registration_service.dto.registration.RegistrationResponse;
+import com.patrick.registration_service.dto.registration.RegistrationRequestDto;
+import com.patrick.registration_service.dto.registration.RegistrationResponseDto;
+import com.patrick.registration_service.exception.EventExpiredException;
+import com.patrick.registration_service.exception.InsufficientEventCapacityException;
+import com.patrick.registration_service.exception.InvalidRegistrationPaymentException;
+import com.patrick.registration_service.exception.RegistrationNotFoundException;
 import com.patrick.registration_service.mapper.RegistrationMapper;
 import com.patrick.registration_service.repository.RegistrationRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -31,10 +35,10 @@ public class RegistrationService {
     private final EventClient eventClient;
     private final PaymentClient paymentClient;
 
-    @CircuitBreaker(name = "registrationService", fallbackMethod = "fallbackCreate")
+    @CircuitBreaker(name = "registrationService")
     @Retry(name = "registrationRetry")
     @RateLimiter(name = "registrationRateLimiter")
-    public RegistrationResponse create(RegistrationRequest request) {
+    public RegistrationResponseDto create(RegistrationRequestDto request) {
         Registration registration = RegistrationMapper.toRegistration(request);
         EventDto event = eventClient.getEvent(registration.getEventId());
 
@@ -49,15 +53,15 @@ public class RegistrationService {
         return RegistrationMapper.toDto(registrationRepository.save(registration));
     }
 
-    @CircuitBreaker(name = "paymentService", fallbackMethod = "fallbackPayment")
+    @CircuitBreaker(name = "paymentService")
     @Retry(name = "paymentRetry")
-    public RegistrationResponse processPayment(UUID id) {
+    public RegistrationResponseDto processPayment(UUID id) {
 
-        Registration registration = registrationRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Registration not found"));
+        Registration registration = registrationRepository.findById(id).orElseThrow(() -> new RegistrationNotFoundException
+                (String.format("No registration exists with ID: %s. Please verify the provided registration ID and try again", id)));
 
         if (registration.getStatus() != Status.PENDING_PAYMENT) {
-            throw new RuntimeException("Registration is not in a pending state.");
+            throw new InvalidRegistrationPaymentException("Registration is not in a pending state.");
         }
 
         EventDto event = eventClient.getEvent(registration.getEventId());
@@ -77,31 +81,21 @@ public class RegistrationService {
         return RegistrationMapper.toDto(registrationRepository.save(registration));
     }
 
-    public List<RegistrationResponse> getAll() {
+    public List<RegistrationResponseDto> getAll() {
         return registrationRepository.findAll().stream().map(RegistrationMapper::toDto).toList();
     }
 
-    public List<RegistrationResponse> getAllByEvent(UUID eventId) {
+    public List<RegistrationResponseDto> getAllByEvent(UUID eventId) {
         return registrationRepository.findAllByEventId(eventId).stream().map(RegistrationMapper::toDto).toList();
     }
 
     private void validateRegistration(EventDto event, Integer quantity) {
         if (event.date().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Registration impossible: the event has already taken place or the deadline has expired.");
+            throw new EventExpiredException("Registration impossible: the event has already taken place or the deadline has expired.");
         }
         if (event.capacity() < quantity) {
-            throw new RuntimeException("Insufficient capacity. Vacancies available: " + event.capacity());
+            throw new InsufficientEventCapacityException("Insufficient capacity. Vacancies available: " + event.capacity());
         }
-    }
-
-    public RegistrationResponse fallbackCreate(RegistrationRequest request, Exception ex) {
-        log.error("Fallback triggered for creation. Reason: {}", ex.getMessage());
-        return new RegistrationResponse(null, request.eventId(), request.quantity(), 0D, Status.FAILED);
-    }
-
-    public RegistrationResponse fallbackPayment(UUID id, Exception ex) {
-        log.error("Fallback triggered for payment of ID {}. Reason: {}", id, ex.getMessage());
-        return new RegistrationResponse(id, null, null, 0D, Status.PENDING_PAYMENT);
     }
 }
 
