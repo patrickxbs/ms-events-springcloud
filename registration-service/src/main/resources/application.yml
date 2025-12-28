@@ -18,16 +18,15 @@ resilience4j:
   circuitbreaker:
     instances:
       registrationService:
-        registerHealthIndicator: true
         slidingWindowSize: 5
         failureRateThreshold: 50
         waitDurationInOpenState: 30s
         permittedNumberOfCallsInHalfOpenState: 2
       paymentService:
-        registerHealthIndicator: true
         slidingWindowSize: 5
         failureRateThreshold: 50
         waitDurationInOpenState: 30s
+        permittedNumberOfCallsInHalfOpenState: 2
   retry:
     instances:
       registrationRetry:

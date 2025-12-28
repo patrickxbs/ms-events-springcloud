@@ -1,5 +1,6 @@
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\client\EventClient.java
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\client\PaymentClient.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\config\Resilience4jConfig.java
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\config\SwaggerConfig.java
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\config\WebConfig.java
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\controller\RegistrationController.java
@@ -10,7 +11,6 @@ C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registr
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\dto\payment\PaymentStatus.java
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\dto\registration\RegistrationRequestDto.java
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\dto\registration\RegistrationResponseDto.java
-C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\exception\ApiException.java
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\exception\EventExpiredException.java
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\exception\handler\ErroFields.java
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\exception\handler\ExceptionDetails.java
@@ -19,6 +19,7 @@ C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registr
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\exception\InsufficientEventCapacityException.java
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\exception\InvalidRegistrationPaymentException.java
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\exception\RegistrationNotFoundException.java
+C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\exception\ServiceUnavailableException.java
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\mapper\RegistrationMapper.java
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\RegistrationServiceApplication.java
 C:\Users\NT\dev\ms-events\registration-service\src\main\java\com\patrick\registration_service\repository\RegistrationRepository.java

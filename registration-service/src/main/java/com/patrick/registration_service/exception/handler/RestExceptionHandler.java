@@ -1,9 +1,6 @@
 package com.patrick.registration_service.exception.handler;
 
-import com.patrick.registration_service.exception.EventExpiredException;
-import com.patrick.registration_service.exception.InsufficientEventCapacityException;
-import com.patrick.registration_service.exception.InvalidRegistrationPaymentException;
-import com.patrick.registration_service.exception.RegistrationNotFoundException;
+import com.patrick.registration_service.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +42,16 @@ public class RestExceptionHandler {
                 LocalDateTime.now(),
                 "CONFLICT",
                 ex.getMessage()));
+    }
+
+    @ExceptionHandler(ServiceUnavailableException.class)
+    public ResponseEntity<ExceptionDetails> handleServiceUnavailable(ServiceUnavailableException ex) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(new ExceptionDetails(
+                        LocalDateTime.now(),
+                        "SERVICE_UNAVAILABLE",
+                        ex.getMessage()
+                ));
     }
 
     @ExceptionHandler(Exception.class)

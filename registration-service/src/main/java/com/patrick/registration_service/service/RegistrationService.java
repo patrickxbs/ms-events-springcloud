@@ -9,12 +9,10 @@ import com.patrick.registration_service.dto.payment.PaymentDto;
 import com.patrick.registration_service.dto.payment.PaymentStatus;
 import com.patrick.registration_service.dto.registration.RegistrationRequestDto;
 import com.patrick.registration_service.dto.registration.RegistrationResponseDto;
-import com.patrick.registration_service.exception.EventExpiredException;
-import com.patrick.registration_service.exception.InsufficientEventCapacityException;
-import com.patrick.registration_service.exception.InvalidRegistrationPaymentException;
-import com.patrick.registration_service.exception.RegistrationNotFoundException;
+import com.patrick.registration_service.exception.*;
 import com.patrick.registration_service.mapper.RegistrationMapper;
 import com.patrick.registration_service.repository.RegistrationRepository;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -35,7 +33,7 @@ public class RegistrationService {
     private final EventClient eventClient;
     private final PaymentClient paymentClient;
 
-    @CircuitBreaker(name = "registrationService")
+    @CircuitBreaker(name = "registrationService", fallbackMethod = "fallbackCreateOpenCircuit")
     @Retry(name = "registrationRetry")
     @RateLimiter(name = "registrationRateLimiter")
     public RegistrationResponseDto create(RegistrationRequestDto request) {
@@ -53,7 +51,7 @@ public class RegistrationService {
         return RegistrationMapper.toDto(registrationRepository.save(registration));
     }
 
-    @CircuitBreaker(name = "paymentService")
+    @CircuitBreaker(name = "paymentService", fallbackMethod = "fallbackPaymentOpenCircuit")
     @Retry(name = "paymentRetry")
     public RegistrationResponseDto processPayment(UUID id) {
 
@@ -74,9 +72,7 @@ public class RegistrationService {
         if (payment.paymentStatus().equals(PaymentStatus.PAID)) {
             registration.setStatus(Status.CONFIRMED);
             eventClient.decreaseEventCapacity(registration.getEventId(), registration.getQuantity());
-        }
-
-        else registration.setStatus(Status.CANCELLED);
+        } else registration.setStatus(Status.CANCELLED);
 
         return RegistrationMapper.toDto(registrationRepository.save(registration));
     }
@@ -97,5 +93,14 @@ public class RegistrationService {
             throw new InsufficientEventCapacityException("Insufficient capacity. Vacancies available: " + event.capacity());
         }
     }
-}
 
+    public RegistrationResponseDto fallbackCreateOpenCircuit(RegistrationRequestDto request, CallNotPermittedException ex) {
+        log.warn("Circuit OPEN for registrationService.");
+        throw new ServiceUnavailableException("Event service temporarily unavailable");
+    }
+
+    public RegistrationResponseDto fallbackPaymentOpenCircuit(UUID id, CallNotPermittedException ex) {
+        log.warn("Circuit OPEN for paymentService.");
+        throw new ServiceUnavailableException("Payment service temporarily unavailable");
+    }
+}

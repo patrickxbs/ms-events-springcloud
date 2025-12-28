@@ -1,6 +1,6 @@
 package com.patrick.registration_service.exception;
 
-public class RegistrationNotFoundException extends ApiException {
+public class RegistrationNotFoundException extends RuntimeException {
 
     public RegistrationNotFoundException(String message) {
         super(message);

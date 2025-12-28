@@ -18,8 +18,9 @@ com\patrick\registration_service\RegistrationServiceApplication.class
 com\patrick\registration_service\config\SwaggerConfig.class
 com\patrick\registration_service\exception\handler\ErroFields.class
 com\patrick\registration_service\exception\RegistrationNotFoundException.class
+com\patrick\registration_service\config\Resilience4jConfig.class
+com\patrick\registration_service\exception\ServiceUnavailableException.class
 com\patrick\registration_service\exception\handler\ExceptionDetails.class
-com\patrick\registration_service\exception\ApiException.class
 com\patrick\registration_service\repository\RegistrationRepository.class
 com\patrick\registration_service\dto\payment\PaymentDto.class
 com\patrick\registration_service\client\PaymentClient.class
