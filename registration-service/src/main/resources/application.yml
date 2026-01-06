@@ -39,7 +39,7 @@ resilience4j:
     instances:
       registrationRateLimiter:
         limitForPeriod: 5
-        limitRefreshPeriod: 10s
+        limitRefreshPeriod: 60s
 
 springdoc:
   api-docs:

@@ -33,8 +33,8 @@ public class RegistrationService {
     private final EventClient eventClient;
     private final PaymentClient paymentClient;
 
-    @CircuitBreaker(name = "registrationService", fallbackMethod = "fallbackCreateOpenCircuit")
     @Retry(name = "registrationRetry")
+    @CircuitBreaker(name = "registrationService", fallbackMethod = "fallbackCreateOpenCircuit")
     @RateLimiter(name = "registrationRateLimiter")
     public RegistrationResponseDto create(RegistrationRequestDto request) {
         Registration registration = RegistrationMapper.toRegistration(request);
@@ -51,8 +51,8 @@ public class RegistrationService {
         return RegistrationMapper.toDto(registrationRepository.save(registration));
     }
 
-    @CircuitBreaker(name = "paymentService", fallbackMethod = "fallbackPaymentOpenCircuit")
     @Retry(name = "paymentRetry")
+    @CircuitBreaker(name = "paymentService", fallbackMethod = "fallbackPaymentOpenCircuit")
     public RegistrationResponseDto processPayment(UUID id) {
 
         Registration registration = registrationRepository.findById(id).orElseThrow(() -> new RegistrationNotFoundException
@@ -94,13 +94,13 @@ public class RegistrationService {
         }
     }
 
-    public RegistrationResponseDto fallbackCreateOpenCircuit(RegistrationRequestDto request, CallNotPermittedException ex) {
-        log.warn("Circuit OPEN for registrationService.");
+    public RegistrationResponseDto fallbackCreateOpenCircuit(RegistrationRequestDto request, Throwable ex) {
+        if (ex instanceof CallNotPermittedException) log.warn("Circuit open for registration service.");
         throw new ServiceUnavailableException("Event service temporarily unavailable");
     }
 
-    public RegistrationResponseDto fallbackPaymentOpenCircuit(UUID id, CallNotPermittedException ex) {
-        log.warn("Circuit OPEN for paymentService.");
+    public RegistrationResponseDto fallbackPaymentOpenCircuit(UUID id, Throwable ex) {
+        if (ex instanceof CallNotPermittedException) log.warn("Circuit open for payment service.");
         throw new ServiceUnavailableException("Payment service temporarily unavailable");
     }
 }

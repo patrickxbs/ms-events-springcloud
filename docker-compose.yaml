@@ -4,6 +4,7 @@ services:
     image: patrickbxs/config-server
     ports:
       - 8888:8888
+    restart: always
     build:
       context: ./config-server
       dockerfile: Dockerfile
@@ -14,6 +15,7 @@ services:
     image: patrickbxs/discovery-service
     ports:
       - 8761:8761
+    restart: always
     build:
       context: ./discovery-service
       dockerfile: Dockerfile
