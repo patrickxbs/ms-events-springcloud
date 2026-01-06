@@ -5,9 +5,6 @@ services:
     ports:
       - 8888:8888
     restart: always
-    build:
-      context: ./config-server
-      dockerfile: Dockerfile
     networks:
       - patrick-network
 
@@ -16,9 +13,6 @@ services:
     ports:
       - 8761:8761
     restart: always
-    build:
-      context: ./discovery-service
-      dockerfile: Dockerfile
     networks:
       - patrick-network
 
@@ -27,9 +21,6 @@ services:
     ports:
       - 8765:8765
     restart: always
-    build:
-      context: ./api-gateway
-      dockerfile: Dockerfile
     depends_on:
       - discovery-service
     environment:
@@ -87,9 +78,6 @@ services:
   event-service:
     image: patrickbxs/event-service
     restart: on-failure
-    build:
-      context: ./event-service
-      dockerfile: Dockerfile
     environment:
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
       TZ: America/Sao_Paulo
@@ -109,9 +97,6 @@ services:
   payment-service:
     image: patrickbxs/payment-service
     restart: on-failure
-    build:
-      context: ./payment-service
-      dockerfile: Dockerfile
     environment:
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
       TZ: America/Sao_Paulo
@@ -134,9 +119,6 @@ services:
   registration-service:
     image: patrickbxs/registration-service
     restart: on-failure
-    build:
-      context: ./registration-service
-      dockerfile: Dockerfile
     environment:
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
       TZ: America/Sao_Paulo
