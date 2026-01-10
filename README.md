@@ -1,4 +1,4 @@
-Microservices Events 
+Events Microservices 
 ---
 Este projeto é uma implementação de uma arquitetura de microserviços, focada na gestão de eventos, inscrições e pagamentos. O objetivo principal foi aplicar conceitos de Sistemas Distribuídos Comunicação Síncrona.
 
